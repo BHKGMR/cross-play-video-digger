@@ -7,6 +7,47 @@
 import express from "express";
 import cors from "cors";
 import { spawn } from "node:child_process";
+import { existsSync } from "node:fs";
+import { execSync } from "node:child_process";
+
+const IS_WIN = process.platform === "win32";
+
+function resolveYtdlp() {
+  // 1) Ưu tiên biến môi trường YTDLP_BIN nếu set
+  if (process.env.YTDLP_BIN && existsSync(process.env.YTDLP_BIN)) {
+    return process.env.YTDLP_BIN;
+  }
+  // 2) Tìm trong PATH (where trên Windows, which trên Linux/macOS)
+  try {
+    const cmd = IS_WIN ? "where yt-dlp" : "which yt-dlp";
+    const found = execSync(cmd, { stdio: ["ignore", "pipe", "ignore"] })
+      .toString()
+      .split(/\r?\n/)
+      .map((s) => s.trim())
+      .filter(Boolean)[0];
+    if (found) return found;
+  } catch {
+    /* ignore */
+  }
+  // 3) Vị trí mặc định phổ biến
+  const candidates = IS_WIN
+    ? [
+        "C:\\\\yt-dlp\\\\yt-dlp.exe",
+        "C:\\\\Program Files\\\\yt-dlp\\\\yt-dlp.exe",
+        `${process.env.USERPROFILE || ""}\\\\yt-dlp.exe`,
+      ]
+    : ["/usr/local/bin/yt-dlp", "/usr/bin/yt-dlp"];
+  for (const p of candidates) if (p && existsSync(p)) return p;
+  // Fallback: để spawn tự gọi (sẽ lỗi nếu thiếu)
+  return IS_WIN ? "yt-dlp.exe" : "yt-dlp";
+}
+
+const YTDLP = resolveYtdlp();
+console.log(`[ytdlp-api] yt-dlp binary: ${YTDLP}`);
+
+// (Tuỳ chọn) chỉ định ffmpeg để yt-dlp merge video+audio.
+// Đặt FFMPEG_LOCATION trong .env nếu ffmpeg không nằm trong PATH.
+const FFMPEG_LOCATION = process.env.FFMPEG_LOCATION;
 
 const app = express();
 app.use(express.json({ limit: "1mb" }));
@@ -22,12 +63,13 @@ const COOKIES = process.env.YTDLP_COOKIES_FILE; // optional path to cookies.txt
 function ytdlpArgs(extra) {
   const base = ["--no-warnings", "--no-playlist"];
   if (COOKIES) base.push("--cookies", COOKIES);
+  if (FFMPEG_LOCATION) base.push("--ffmpeg-location", FFMPEG_LOCATION);
   return [...base, ...extra];
 }
 
 function runYtdlpJson(url) {
   return new Promise((resolve, reject) => {
-    const proc = spawn("yt-dlp", ytdlpArgs(["-J", url]));
+    const proc = spawn(YTDLP, ytdlpArgs(["-J", url]), { windowsHide: true });
     let out = "";
     let err = "";
     proc.stdout.on("data", (d) => (out += d));
@@ -139,7 +181,7 @@ app.get("/api/download", async (req, res) => {
       "-",
       String(url),
     ]);
-    const proc = spawn("yt-dlp", args);
+    const proc = spawn(YTDLP, args, { windowsHide: true });
     proc.stdout.pipe(res);
     proc.stderr.on("data", (d) => process.stderr.write(d));
     proc.on("close", (code) => {
