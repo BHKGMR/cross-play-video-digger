@@ -34,6 +34,7 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-glow: var(--primary-glow);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
@@ -62,26 +63,33 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
+  --radius: 1rem;
+  /* Dark neon as default — designed dark-first */
+  --background: oklch(0.16 0.03 275);
+  --foreground: oklch(0.98 0.005 280);
+  --card: oklch(0.21 0.035 275 / 0.6);
+  --card-foreground: oklch(0.98 0.005 280);
+  --popover: oklch(0.18 0.035 275);
+  --popover-foreground: oklch(0.98 0.005 280);
+  --primary: oklch(0.72 0.22 320);
+  --primary-foreground: oklch(0.12 0.02 280);
+  --primary-glow: oklch(0.78 0.18 200);
+  --secondary: oklch(0.26 0.04 275);
+  --secondary-foreground: oklch(0.98 0.005 280);
+  --muted: oklch(0.24 0.03 275);
+  --muted-foreground: oklch(0.72 0.02 275);
+  --accent: oklch(0.78 0.18 200);
+  --accent-foreground: oklch(0.12 0.02 280);
+  --destructive: oklch(0.68 0.22 25);
+  --destructive-foreground: oklch(0.98 0.005 280);
+  --border: oklch(1 0 0 / 0.08);
+  --input: oklch(1 0 0 / 0.1);
+  --ring: oklch(0.72 0.22 320);
+  --gradient-primary: linear-gradient(135deg, oklch(0.72 0.22 320), oklch(0.78 0.18 200));
+  --gradient-hero: radial-gradient(ellipse at top, oklch(0.32 0.12 300 / 0.6), transparent 60%),
+    radial-gradient(ellipse at bottom right, oklch(0.32 0.12 220 / 0.5), transparent 60%);
+  --shadow-glow: 0 0 60px oklch(0.72 0.22 320 / 0.35);
+  --shadow-elegant: 0 20px 50px -20px oklch(0.12 0.02 280 / 0.6);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);

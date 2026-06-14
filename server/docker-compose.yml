@@ -1,0 +1,14 @@
+services:
+  ytdlp-api:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      # Cho phép site Lovable của bạn gọi qua. Đổi domain bên dưới.
+      - ALLOWED_ORIGINS=https://your-site.lovable.app,https://yourdomain.com
+      # (Tuỳ chọn) đường dẫn cookies cho YouTube/Instagram login-required
+      # - YTDLP_COOKIES_FILE=/cookies/cookies.txt
+    # volumes:
+    #   - ./cookies:/cookies:ro
