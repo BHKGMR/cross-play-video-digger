@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: ytdlp-api
+    env: docker
+    repo: https://github.com/BHKGMR/cross-play-video-digger
+    dockerfilePath: ./server/Dockerfile
+    dockerContext: ./server
+    healthCheckPath: /healthz
+    envVars:
+      - key: PORT
+        value: "8080"
+      - key: ALLOWED_ORIGINS
+        value: https://cross-play-video-digger.vercel.app
