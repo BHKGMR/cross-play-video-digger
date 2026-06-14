@@ -5,7 +5,65 @@ Server tự dò `yt-dlp.exe` trong PATH (hoặc theo biến `YTDLP_BIN`).
 
 ---
 
-## A. Triển khai trên VPS Windows
+## A. Chạy toàn bộ trên máy local (Dev)
+
+Dùng khi bạn chưa deploy VPS, muốn test ngay trên máy.
+
+### 1) Cài Node.js, yt-dlp, ffmpeg
+
+```powershell
+# Node.js LTS: https://nodejs.org
+node -v
+npm -v
+
+# yt-dlp và ffmpeg
+winget install yt-dlp.yt-dlp
+winget install Gyan.FFmpeg
+
+# Kiểm tra (mở PowerShell mới)
+yt-dlp --version
+ffmpeg -version
+```
+
+> Nếu `winget` không có: tải tay `yt-dlp.exe` và `ffmpeg` rồi thêm vào PATH.
+
+### 2) Chạy backend
+
+```powershell
+cd server
+npm install
+
+$env:ALLOWED_ORIGINS = "*"
+$env:PORT = "8080"
+node index.js
+```
+
+Kiểm tra: mở trình duyệt vào `http://localhost:8080/healthz` → thấy `ok`.
+
+### 3) Khai báo URL cho frontend
+
+Ở thư mục **gốc** project, tạo file `.env` (copy từ `.env.example`):
+
+```env
+YTDLP_API_URL=http://localhost:8080
+```
+
+> Trong dev mode (`bun dev`), TanStack Start tự đọc `.env` và biến `YTDLP_API_URL` sẽ có trong server functions.
+
+### 4) Chạy frontend dev server
+
+Mở terminal khác ở thư mục gốc project:
+
+```powershell
+bun install
+bun dev
+```
+
+Mở trình duyệt vào URL dev server (thường `http://localhost:3000`) để test.
+
+---
+
+## B. Triển khai trên VPS Windows (Production)
 
 ### 1) Cài Node.js LTS
 
@@ -99,7 +157,7 @@ YTDLP_API_URL = https://ytdlp.yourdomain.com
 
 ---
 
-## B. (Tuỳ chọn) Triển khai bằng Docker trên Linux
+## C. (Tuỳ chọn) Triển khai bằng Docker trên Linux
 
 Nếu sau này bạn chuyển sang Linux, file `Dockerfile` + `docker-compose.yml` đã có sẵn:
 
