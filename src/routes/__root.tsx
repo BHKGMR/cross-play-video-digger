@@ -77,11 +77,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "TảiVideo — Tải video đa nền tảng miễn phí" },
+      {
+        name: "description",
+        content:
+          "Tải video TikTok, YouTube, Instagram, Facebook, Twitter/X… nhanh, miễn phí, không watermark. Hỗ trợ MP4 và MP3.",
+      },
+      { name: "author", content: "TảiVideo" },
+      { property: "og:title", content: "TảiVideo — Tải video đa nền tảng" },
+      {
+        property: "og:description",
+        content: "Dán link, chọn chất lượng, tải về. TikTok, YouTube, Instagram, Facebook, X.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
